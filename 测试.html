@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Code 网站示例</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0078d4;
+            --secondary: #505050;
+            --accent: #ff4343;
+            --light: #f3f3f3;
+            --dark: #252526;
+            --vscode-dark: #1e1e1e;
+            --vscode-blue: #007acc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(120deg, var(--vscode-dark), var(--primary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        nav {
+            background-color: var(--vscode-dark);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin: 0 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            background-color: white;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: var(--secondary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #0062a8;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .features {
+            padding: 4rem 0;
+            background-color: #f8f9fa;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .code-editor {
+            background-color: var(--vscode-dark);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            color: white;
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow-x: auto;
+        }
+        
+        .code-comment {
+            color: #6a9955;
+        }
+        
+        .code-keyword {
+            color: #c586c0;
+        }
+        
+        .code-function {
+            color: #dcdcaa;
+        }
+        
+        .code-string {
+            color: #ce9178;
+        }
+        
+        footer {
+            background: var(--vscode-dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .social-links {
+            margin: 1rem 0;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 5px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .vscode-tips {
+            background-color: white;
+            padding: 3rem 0;
+        }
+        
+        .tip {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary);
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-code"></i>
+            </div>
+            <h1>Visual Studio Code 网站示例</h1>
+            <p>使用VS Code创建现代化响应式网站</p>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#"><i class="fas fa-home"></i> 首页</a></li>
+            <li><a href="#"><i class="fas fa-info-circle"></i> 关于</a></li>
+            <li><a href="#"><i class="fas fa-cogs"></i> 服务</a></li>
+            <li><a href="#"><i class="fas fa-blog"></i> 博客</a></li>
+            <li><a href="#"><i class="fas fa-envelope"></i> 联系</a></li>
+        </ul>
+    </nav>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>使用VS Code开发网站</h1>
+            <p>Visual Studio Code是一款强大的代码编辑器，支持多种编程语言和框架，是前端开发的首选工具。</p>
+            <a href="#" class="btn">开始学习</a>
+        </div>
+    </section>
+    
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">VS Code 主要特性</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>快速高效</h3>
+                    <p>轻量级但功能强大，启动速度快，运行流畅。</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3>扩展丰富</h3>
+                    <p>拥有大量扩展插件，可以满足各种开发需求。</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>智能代码</h3>
+                    <p>支持智能代码补全、语法高亮和代码调试。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="vscode-tips">
+        <div class="container">
+            <h2 class="section-title">VS Code 使用技巧</h2>
+            
+            <div class="tip">
+                <h3>多光标编辑</h3>
+                <p>使用Alt+Click添加多个光标，或者使用Ctrl+D选择下一个相同的内容。</p>
+            </div>
+            
+            <div class="tip">
+                <h3>命令面板</h3>
+                <p>使用Ctrl+Shift+P打开命令面板，可以快速访问所有功能。</p>
+            </div>
+            
+            <div class="tip">
+                <h3>集成终端</h3>
+                <p>使用Ctrl+`打开集成终端，无需离开编辑器即可运行命令。</p>
+            </div>
+            
+            <div class="code-editor">
+                <pre><code><span class="code-comment">// 简单的JavaScript示例</span>
+<span class="code-keyword">function</span> <span class="code-function">greet</span>(name) {
+    <span class="code-keyword">return</span> <span class="code-string">`Hello, ${name}! Welcome to VS Code.`</span>;
+}
+
+<span class="code-keyword">const</span> userName = <span class="code-string">"开发者"</span>;
+console.<span class="code-function">log</span>(<span class="code-function">greet</span>(userName));</code></pre>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 VS Code网站示例。保留所有权利。</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 简单的交互功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            featureCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
+            
+            // 添加滚动效果
+            window.addEventListener('scroll', function() {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 100) {
+                    nav.style.backgroundColor = 'rgba(30, 30, 30, 0.95)';
+                } else {
+                    nav.style.backgroundColor = '';
+                }
+            });
+            
+            // 按钮点击效果
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('欢迎使用VS Code进行开发！');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
